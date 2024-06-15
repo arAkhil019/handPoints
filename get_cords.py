@@ -44,15 +44,15 @@ def drawLandMarks(name,img_path, detection_result):
     annotated_image = cv2.cvtColor(annotated_image, cv2.COLOR_RGB2BGR)
     cv2.imwrite(str(pwd)+'/output/Output' + str(name) + ".jpg", annotated_image)
     #uncomment below to view output and to close a window press 'q'
-    # while True:
-    #     cv2.imshow("Output Mapping:",annotated_image)
-    #     if cv2.waitKey(1) & 0xFF == ord('q'):
-    #         break
+    while True:
+        cv2.imshow("Output Mapping:",annotated_image)
+        if cv2.waitKey(1) & 0xFF == ord('q'):
+            break
 
 #to iterate images in model and gather co-ordinates
 def iterateImages():
     with open('co-ordinates.txt', 'w') as f:
-        for i in range(1, 5):
+        for i in range(5, 9):
             img_path = 'images/' + str(i) + '.jpg'
             op, detection_result = runModel(img_path)
             f.write(str(op) + '\n')

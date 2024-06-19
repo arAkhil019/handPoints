@@ -52,7 +52,7 @@ def drawLandMarks(name,img_path, detection_result):
 #to iterate images in model and gather co-ordinates
 def iterateImages():
     with open('co-ordinates.txt', 'w') as f:
-        for i in range(1, 9):
+        for i in range(1, 13):
             img_path = 'images/' + str(i) + '.jpg'
             op, detection_result = runModel(img_path)
             f.write(str(op) + '\n')

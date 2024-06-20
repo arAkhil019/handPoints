@@ -4,7 +4,8 @@ from mediapipe.tasks.python import vision
 import cv2
 import os
 from draw import draw_landmarks_on_image  #to draw on image input given to verify
-from get_anglesList import get_angle #to get angles from co-ordinates
+from get_anglesList import get_anglesList #to get angles from co-ordinates
+# from plot_cords import plotangles, plotxy, plot_z #to plot co-ordinates
 
 model_path = 'hand_landmarker.task'
 
@@ -21,20 +22,46 @@ options = HandLandmarkerOptions(
 # img = cv2.imread('cheers.jpg')
 # image = mp.Image.create_from_file('cheers.jpg')
 
+#to extract co-ordinates from list of normalised landmarks
+def get_cords(landmarks):
+    cords = []
+    for mark in landmarks:
+        cords.append((mark.x, mark.y, mark.z))
+    return cords
 
+#to get values that are required for the model output
+def getValues(landmarks):
+    values =[]
+    
 #to run model and get results into it
 #function to return co-ordinates of landmarks
 def runModel(img_path):
     image = mp.Image.create_from_file(img_path)
     with HandLandmarker.create_from_options(options) as landmarker:
         detection_result = landmarker.detect(image)
-    print(detection_result)
-    result = detection_result.hand_landmarks[0]
+    # print(detection_result)
+    result = detection_result.hand_landmarks
+    # print(result)
     nLandMarks = len(result)
+    if nLandMarks == 0:
+        print("No Landmarks Detected")
+        return
+    elif nLandMarks == 1:
+        print("One Hand Detected")
+        hand = detection_result.handedness[0]
+        if hand[0].display_name == 'Right':
+            full_result = [0]*23
+            full_result += get_anglesList(get_cords(result[0]))
+            print(full_result)
+        else:
+            full_result = get_anglesList(get_cords(result[0]))+ [0]*23
+            print(full_result)
+    
     op = []
-    for i in range(nLandMarks):
-        mark = result[i]
-        op.append((mark.x, mark.y, mark.z))
+    # for i in range(len(result)):
+    #     mark = result[i]
+    #     op.append((mark.x, mark.y, mark.z))
+    # plotxy(op)
     return op, detection_result
 
 #to draw landmarks on image
@@ -53,11 +80,11 @@ def drawLandMarks(name,img_path, detection_result):
 #to iterate images in model and gather co-ordinates
 def iterateImages():
     with open('co-ordinates.txt', 'a') as f:
-        for i in range(13, 14):
+        for i in range(10, 11):
             img_path = 'images/' + str(i) + '.jpg'
             op, detection_result = runModel(img_path)
             f.write(str(op) + '\n')
-            drawLandMarks(i,img_path, detection_result)
+            # drawLandMarks(i,img_path, detection_result)
 
 iterateImages()
 #saving co-ords into txt file

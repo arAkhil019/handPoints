@@ -1,5 +1,5 @@
 import numpy as np
-import plot_cords as pc
+# import plot_cords as pc
 
 #gives angle w.r.t the x axis
 def get_angle(a,b,c):
@@ -51,16 +51,15 @@ def normalVector(p1, p2, p3):
 
 def get_anglesList(landmarks):
     lm = landmarks
-    angles = {}
+    angles = []
+    order = [1,2,3,5,6,7,9,10,11,13,14,15,17,18,19,'x','y','z','rx','ry','rz','x0','y0']
     for i in range(1,21,4):
         a1 = get3dAngle(lm[0],lm[i],lm[i+1])
         a2 = get3dAngle(lm[i],lm[i+1],lm[i+2])
         a3 = get3dAngle(lm[i+1],lm[i+2],lm[i+3])
-        angles[i] = a1
-        angles[i+1] = a2
-        angles[i+2] = a3
-    angles['xyz'] = findVectorAngle(np.array(lm[0])-np.array(lm[9]))
-    angles['r'] = findVectorAngle(normalVector(lm[5],lm[0],lm[17]))
+        angles.extend([a1,a2,a3])
+    angles.extend(list(findVectorAngle(np.array(lm[0])-np.array(lm[9]))))
+    angles.extend(list(findVectorAngle(normalVector(lm[5],lm[0],lm[17]))))
     return angles
 
 
@@ -70,17 +69,18 @@ lm = [(0.44525253772735596, 0.8821181654930115, 1.7824211795414158e-07), (0.5055
 # print(get_angle((0,0),(1,1),(2,2))) used to test the get_angle function, was correct.
 
 
-with open('co-ordinates.txt', 'r') as f:
-    lines = f.readlines()
-    angles = ''
-    for line in lines:
-        landmarks = eval(line)
-        angles += str(get_anglesList(landmarks))
-        angles += '\n'
-    with open('angles.txt', 'w') as f:
-        f.write(angles)
+def fromCords():
+    with open('co-ordinates.txt', 'r') as f:
+        lines = f.readlines()
+        angles = ''
+        for line in lines:
+            landmarks = eval(line)
+            angles += str(get_anglesList(landmarks))
+            angles += '\n'
+        with open('angles.txt', 'w') as f:
+            f.write(angles)
 
 
 # print(get3dAngle((3,0,0),(0,0,0),(-3,3,0))) was used to verfiy the get3dAngle function, was corrected.
-# print(get_anglesList(landmarks))
+# print(get_anglesList(lm))
 # pc.plotter(landmarks,get_anglesList(landmarks))

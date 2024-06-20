@@ -15,7 +15,7 @@ HandLandmarkerOptions = mp.tasks.vision.HandLandmarkerOptions
 VisionRunningMode = mp.tasks.vision.RunningMode
 
 options = HandLandmarkerOptions(
-    base_options=BaseOptions(model_asset_path=model_path), running_mode = VisionRunningMode.IMAGE)
+    base_options=BaseOptions(model_asset_path=model_path), running_mode = VisionRunningMode.IMAGE, num_hands = 2)
 
 #loading image
 # img = cv2.imread('cheers.jpg')
@@ -28,6 +28,7 @@ def runModel(img_path):
     image = mp.Image.create_from_file(img_path)
     with HandLandmarker.create_from_options(options) as landmarker:
         detection_result = landmarker.detect(image)
+    print(detection_result)
     result = detection_result.hand_landmarks[0]
     nLandMarks = len(result)
     op = []
@@ -51,8 +52,8 @@ def drawLandMarks(name,img_path, detection_result):
 
 #to iterate images in model and gather co-ordinates
 def iterateImages():
-    with open('co-ordinates.txt', 'w') as f:
-        for i in range(1, 13):
+    with open('co-ordinates.txt', 'a') as f:
+        for i in range(13, 14):
             img_path = 'images/' + str(i) + '.jpg'
             op, detection_result = runModel(img_path)
             f.write(str(op) + '\n')

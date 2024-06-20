@@ -63,13 +63,12 @@ def runModel(img_path):
         x0y0, x1y1 = [int(cords1[0][0]*100), int(cords1[0][1]*100)], [int(cords2[0][0]*100), int(cords2[0][1]*100)]
         full_result = get_anglesList(cords1) + x0y0 + get_anglesList(cords2) + x1y1
         print(full_result,len(full_result))
-    
     op = []
     # for i in range(len(result)):
     #     mark = result[i]
     #     op.append((mark.x, mark.y, mark.z))
     # plotxy(op)
-    return op, detection_result
+    return full_result, detection_result
 
 #to draw landmarks on image
 def drawLandMarks(name,img_path, detection_result):
@@ -86,8 +85,8 @@ def drawLandMarks(name,img_path, detection_result):
 
 #to iterate images in model and gather co-ordinates
 def iterateImages():
-    with open('co-ordinates.txt', 'a') as f:
-        for i in range(12, 13):
+    with open('final_set.txt', 'w') as f:
+        for i in range(1, 17):
             img_path = 'images/' + str(i) + '.jpg'
             op, detection_result = runModel(img_path)
             f.write(str(op) + '\n')

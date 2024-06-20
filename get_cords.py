@@ -49,13 +49,19 @@ def runModel(img_path):
     elif nLandMarks == 1:
         print("One Hand Detected")
         hand = detection_result.handedness[0]
+        cords = get_cords(result[0])
+        x0y0 = [int(cords[0][0]*100), int(cords[0][1]*100)]
         if hand[0].display_name == 'Right':
             full_result = [0]*23
-            full_result += get_anglesList(get_cords(result[0]))
+            full_result = full_result + get_anglesList(cords) + x0y0
             print(full_result)
         else:
-            full_result = get_anglesList(get_cords(result[0]))+ [0]*23
+            full_result = get_anglesList(cords) + x0y0 + [0]*23
             print(full_result)
+    else:
+        print("Two Hands Detected")
+        full_result = get_anglesList(get_cords(result[0])) + get_anglesList(get_cords(result[1]))
+        print(full_result)
     
     op = []
     # for i in range(len(result)):

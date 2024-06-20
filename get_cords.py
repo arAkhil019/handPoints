@@ -54,14 +54,15 @@ def runModel(img_path):
         if hand[0].display_name == 'Right':
             full_result = [0]*23
             full_result = full_result + get_anglesList(cords) + x0y0
-            print(full_result)
         else:
             full_result = get_anglesList(cords) + x0y0 + [0]*23
-            print(full_result)
+        print(full_result,len(full_result))
     else:
         print("Two Hands Detected")
-        full_result = get_anglesList(get_cords(result[0])) + get_anglesList(get_cords(result[1]))
-        print(full_result)
+        cords1, cords2 = get_cords(result[0]), get_cords(result[1])
+        x0y0, x1y1 = [int(cords1[0][0]*100), int(cords1[0][1]*100)], [int(cords2[0][0]*100), int(cords2[0][1]*100)]
+        full_result = get_anglesList(cords1) + x0y0 + get_anglesList(cords2) + x1y1
+        print(full_result,len(full_result))
     
     op = []
     # for i in range(len(result)):
@@ -86,11 +87,11 @@ def drawLandMarks(name,img_path, detection_result):
 #to iterate images in model and gather co-ordinates
 def iterateImages():
     with open('co-ordinates.txt', 'a') as f:
-        for i in range(10, 11):
+        for i in range(12, 13):
             img_path = 'images/' + str(i) + '.jpg'
             op, detection_result = runModel(img_path)
             f.write(str(op) + '\n')
-            # drawLandMarks(i,img_path, detection_result)
+            drawLandMarks(i,img_path, detection_result)
 
 iterateImages()
 #saving co-ords into txt file

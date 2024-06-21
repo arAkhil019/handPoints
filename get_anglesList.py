@@ -1,4 +1,5 @@
 import numpy as np
+import math
 # import plot_cords as pc
 
 #gives angle w.r.t the x axis
@@ -36,13 +37,15 @@ def get3dAngle(p1, p2, p3):
 
 def findVectorAngle(v):
     # Calculate vector 'v' angles with axes
-    x = np.degrees(np.arctan2(v[1], v[0]))  # Angle with x-axis
-    y = np.degrees(np.arctan2(v[2], np.sqrt(v[0]**2 + v[1]**2)))  # Angle with y-axis
-    z = np.degrees(np.arctan2(v[2], np.sqrt(v[0]**2 + v[1]**2)))  # Angle with z-axis
+    mag_v = math.sqrt(v[0]**2 + v[1]**2 + v[2]**2)
+    # Calculate angles with planes XY, YZ, XZ using trigonometry
+    x = math.degrees(math.acos(v[2] / mag_v))  # angle with XY plane
+    y = math.degrees(math.acos(v[0] / mag_v))  # angle with YZ plane
+    z = math.degrees(math.acos(v[1] / mag_v)) # angle with XZ plane
     
     return int(x), int(y), int(z)
 
-def normalVector(p1, p2, p3):
+def normalVector(p1, p2, p3): #correct and re-verified...
     v1 = np.array(p1) - np.array(p2)
     v2 = np.array(p3) - np.array(p2)
     # Calculate the normal vector
@@ -68,6 +71,8 @@ lm = [(0.44525253772735596, 0.8821181654930115, 1.7824211795414158e-07), (0.5055
 
 # print(get_angle((0,0),(1,1),(2,2))) used to test the get_angle function, was correct.
 
+# print(normalVector((1,2,3),(0,0,0),(3,1,2)))
+# print(findVectorAngle((-1,-7,5)),findVectorAngle((1,7,-5)))
 
 def fromCords():
     with open('co-ordinates.txt', 'r') as f:

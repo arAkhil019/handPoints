@@ -1,3 +1,4 @@
-order = [1,2,3,5,6,7,9,10,11,13,14,15,17,18,19,'x','y','z','rx','ry','rz','x0','y0']
-
-print(len(order))
+if -50 <= 2 <=50:
+    print('yes')
+else:
+    print('NO')
